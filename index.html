@@ -19,7 +19,7 @@
 
     <script>
         const SUPABASE_URL = "https://pmcjyqaljrvtkhfrjehu.supabase.co";
-        const API_KEY = "TU_API_KEY_AQUI"; // 🔥 pega tu clave aquí
+        const API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBtY2p5cWFsanJ2dGtoZnJqZWh1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU2OTg2NjEsImV4cCI6MjA5MTI3NDY2MX0.tuc7WRvSlIWiXD79DcBt_TGpoJcLrvW1pnUmbzg81w8"; // 🔥 pega tu clave aquí
 
         let ultimoDni = '';
         let bloqueado = false;
@@ -48,8 +48,8 @@
             fetch(`${SUPABASE_URL}/rest/v1/asistencias`, {
                 method: "POST",
                 headers: {
-                    "apikey": 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBtY2p5cWFsanJ2dGtoZnJqZWh1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU2OTg2NjEsImV4cCI6MjA5MTI3NDY2MX0.tuc7WRvSlIWiXD79DcBt_TGpoJcLrvW1pnUmbzg81w8',
-                    "Authorization": `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBtY2p5cWFsanJ2dGtoZnJqZWh1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU2OTg2NjEsImV4cCI6MjA5MTI3NDY2MX0.tuc7WRvSlIWiXD79DcBt_TGpoJcLrvW1pnUmbzg81w8`,
+                    "apikey": API_KEY,
+                    "Authorization": `Bearer ${API_KEY}`,
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
