@@ -79,19 +79,19 @@
 
         // 🚀 iniciar cámara
         window.onload = function () {
+
             let scanner = new Html5Qrcode("reader");
+
             scanner.start(
+                { facingMode: "environment" }, // cámara trasera
                 {
-                    facingMode: "environment",
-                    advanced: [{ width: 1920, height: 1080 }]
-                },
-                {
-                    fps: 15,
+                    fps: 10,
                     qrbox: 250
                 },
                 (decodedText) => {
                     registrarAsistencia(decodedText);
-                }
+                },
+                (error) => { }
             );
         };
     </script>
