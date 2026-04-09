@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Asistencia QR</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body style="text-align:center; font-family:Arial;">
+
+    <h2>📷 Control de Asistencia</h2>
+
+    <div id="reader" style="width:300px; margin:auto;"></div>
+
+    <h3 id="mensaje"></h3>
+
+    <script src="https://unpkg.com/html5-qrcode"></script>
+
+    <script>
+        const SUPABASE_URL = "https://pmcjyqaljrvtkhfrjehu.supabase.co";
+        const API_KEY = "TU_API_KEY_AQUI"; // 🔥 pega tu clave aquí
+
+        let ultimoDni = '';
+        let bloqueado = false;
+
+        function mostrarMensaje(texto, color) {
+            const msg = document.getElementById("mensaje");
+            msg.innerText = texto;
+            msg.style.color = color;
+        }
+
+        function sonidoOK() {
+            new Audio('https://www.soundjay.com/buttons/beep-07.mp3').play();
+        }
+
+        function registrarAsistencia(dni) {
+
+            // 🚫 evitar múltiples lecturas
+            if (bloqueado || dni === ultimoDni) return;
+
+            bloqueado = true;
+            ultimoDni = dni;
+
+            const fecha = new Date().toISOString().split('T')[0];
+            const hora = new Date().toTimeString().split(' ')[0];
+
+            fetch(`${SUPABASE_URL}/rest/v1/asistencias`, {
+                method: "POST",
+                headers: {
+                    "apikey": 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBtY2p5cWFsanJ2dGtoZnJqZWh1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU2OTg2NjEsImV4cCI6MjA5MTI3NDY2MX0.tuc7WRvSlIWiXD79DcBt_TGpoJcLrvW1pnUmbzg81w8',
+                    "Authorization": `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBtY2p5cWFsanJ2dGtoZnJqZWh1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU2OTg2NjEsImV4cCI6MjA5MTI3NDY2MX0.tuc7WRvSlIWiXD79DcBt_TGpoJcLrvW1pnUmbzg81w8`,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    dni: dni,
+                    fecha: fecha,
+                    hora: hora,
+                    tipo: "ingreso"
+                })
+            })
+                .then(res => {
+                    if (res.ok) {
+                        mostrarMensaje("✅ Registrado: " + dni, "green");
+                        sonidoOK();
+                        navigator.vibrate(200);
+                    } else {
+                        mostrarMensaje("❌ Error al registrar", "red");
+                    }
+                });
+
+            // 🔓 desbloquear después de 2 segundos
+            setTimeout(() => {
+                bloqueado = false;
+                ultimoDni = '';
+                mostrarMensaje("", "black");
+            }, 2000);
+        }
+
+        // 🚀 iniciar cámara
+        window.onload = function () {
+
+            let scanner = new Html5Qrcode("reader");
+
+            scanner.start(
+                { facingMode: "environment" }, // cámara trasera
+                {
+                    fps: 10,
+                    qrbox: 250
+                },
+                (decodedText) => {
+                    registrarAsistencia(decodedText);
+                },
+                (error) => { }
+            );
+        };
+    </script>
+
+</body>
+
+</html>
