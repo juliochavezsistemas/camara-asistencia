@@ -83,10 +83,14 @@
             let scanner = new Html5Qrcode("reader");
 
             scanner.start(
-                { facingMode: "environment" }, // cámara trasera
                 {
-                    fps: 10,
-                    qrbox: 250
+                    facingMode: "environment",
+                    width: { ideal: 1920 },
+                    height: { ideal: 1080 }
+                },
+                {
+                    fps: 15, // un poco más fluido
+                    qrbox: { width: 250, height: 250 }
                 },
                 (decodedText) => {
                     registrarAsistencia(decodedText);
